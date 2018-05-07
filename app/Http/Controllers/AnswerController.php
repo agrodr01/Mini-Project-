@@ -24,7 +24,7 @@ class AnswerController extends Controller
     {
         $answer = new Answer;
         $edit = FALSE;
-        return view('answerForm', ['answer' => $answer,'edit' => $edit, 'question' =>$question  ]);
+        return view('answerForm', ['answer' => $answer,'edit' => $edit, 'question' =>$question]);
     }
     /**
      * Store a newly created resource in storage.
@@ -91,6 +91,15 @@ class AnswerController extends Controller
         $answer->body = $request->body;
         $answer->save();
         return redirect()->route('answers.show',['question_id' => $question, 'answer_id' => $answer])->with('message', 'Updated');
+    }
+
+    public function like(Request $request, $question, $answer)
+    {
+
+        $answer = Answer::find($answer);
+        $answer->score = $answer->score +1;
+        $answer->save();
+        return redirect()->route('answers.show',['question_id' => $question, 'answer_id' => $answer])->with('message', 'Liked');
     }
     /**
      * Remove the specified resource from storage.
